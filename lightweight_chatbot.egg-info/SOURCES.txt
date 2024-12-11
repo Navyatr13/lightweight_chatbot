@@ -1,0 +1,17 @@
+README.md
+setup.py
+app/__init__.py
+app/chain.py
+app/config.py
+app/main.py
+app/models.py
+app/retriever.py
+app/utils.py
+app/templates/__init__.py
+app/tests/__init__.py
+app/tests/test_models.py
+app/tests/test_retriever.py
+lightweight_chatbot.egg-info/PKG-INFO
+lightweight_chatbot.egg-info/SOURCES.txt
+lightweight_chatbot.egg-info/dependency_links.txt
+lightweight_chatbot.egg-info/top_level.txt

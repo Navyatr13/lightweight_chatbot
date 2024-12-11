@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            font-size: 1em;
+        }
+        .input-container button {
+            padding: 10px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Chatbot</h1>
+        <div id="chatbox" class="messages">
+            <p>Welcome to the chatbot! Start your conversation below.</p>
+        </div>
+        <div class="input-container">
+            <input id="queryInput" type="text" placeholder="Type your message here..." />
+            <button onclick="submitQuery()">Send</button>
+        </div>
+    </div>
+    <script>
+        async function submitQuery() {
+        const queryInput = document.getElementById("queryInput");
+        const chatbox = document.getElementById("chatbox");
+    
+        const query = queryInput.value.trim();
+        if (!query) return;
+    
+        // Add user's query to the chatbox
+        chatbox.innerHTML += `<p><strong>User:</strong> ${query}</p>`;
+        queryInput.value = "";
+    
+        try {
+            const apiUrl = "https://ad33-3-17-129-179.ngrok-free.app/query"; // Update this URL if using ngrok or deployed
+            console.log("Sending request to:", apiUrl);
+    
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query })
+            });
+    
+            console.log("Received raw response:", response);
+    
+            if (!response.ok) {
+                throw new Error(`Server returned status ${response.status}: ${response.statusText}`);
+            }
+    
+            const data = await response.json();
+            console.log("Parsed response data:", data);
+    
+            // Display the conversation
+            if (data.conversation) {
+                chatbox.innerHTML += data.conversation
+                    .map(line => `<p>${line}</p>`)
+                    .join("");
+            } else {
+                chatbox.innerHTML += `<p><strong>Error:</strong> Unexpected response format.</p>`;
+            }
+    
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+        } catch (error) {
+            console.error("Error during fetch:", error);
+            chatbox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+        }
+    }
+
+    </script>
+</body>
+</html>
