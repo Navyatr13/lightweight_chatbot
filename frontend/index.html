@@ -9,30 +9,72 @@
             font-family: Arial, sans-serif;
             margin: 20px;
             padding: 0;
+            background-color: #f8f9fa;
         }
         .chat-container {
             max-width: 600px;
             margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            background: #007bff;
+            color: #fff;
+            padding: 10px;
+            margin: 0;
         }
         .messages {
             border: 1px solid #ccc;
             padding: 10px;
             height: 300px;
             overflow-y: auto;
-            margin-bottom: 10px;
+            margin-bottom: 0;
+            background: #fafafa;
+            scroll-behavior: smooth;
+        }
+        .message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message img {
+            width: 20px;
+            height: 20px;
         }
         .input-container {
             display: flex;
             gap: 10px;
+            padding: 10px;
+            background: #e9ecef;
         }
         .input-container input {
             flex: 1;
             padding: 10px;
             font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         .input-container button {
             padding: 10px;
             font-size: 1em;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-container button:hover {
+            background: #0056b3;
         }
     </style>
 </head>
@@ -40,62 +82,79 @@
     <div class="chat-container">
         <h1>Chatbot</h1>
         <div id="chatbox" class="messages">
-            <p>Welcome to the chatbot! Start your conversation below.</p>
+            <div class="message bot">
+                <img src="https://cdn-icons-png.flaticon.com/512/6819/6819346.png" alt="Bot" />
+                <p>Welcome to the chatbot! Start your conversation below.</p>
+            </div>
         </div>
         <div class="input-container">
-            <input id="queryInput" type="text" placeholder="Type your message here..." />
+            <input id="queryInput" type="text" placeholder="Type your message here..." onkeydown="handleKeyPress(event)" />
             <button onclick="submitQuery()">Send</button>
         </div>
     </div>
     <script>
-        async function submitQuery() {
-        const queryInput = document.getElementById("queryInput");
-        const chatbox = document.getElementById("chatbox");
-    
-        const query = queryInput.value.trim();
-        if (!query) return;
-    
-        // Add user's query to the chatbox
-        chatbox.innerHTML += `<p><strong>User:</strong> ${query}</p>`;
-        queryInput.value = "";
-    
-        try {
-            const apiUrl = "https://ad33-3-17-129-179.ngrok-free.app/query"; // Update this URL if using ngrok or deployed
-            console.log("Sending request to:", apiUrl);
-    
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ query })
-            });
-    
-            console.log("Received raw response:", response);
-    
-            if (!response.ok) {
-                throw new Error(`Server returned status ${response.status}: ${response.statusText}`);
+        // Function to submit the query on Enter key press
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                submitQuery();
             }
-    
-            const data = await response.json();
-            console.log("Parsed response data:", data);
-    
-            // Display the conversation
-            if (data.conversation) {
-                chatbox.innerHTML += data.conversation
-                    .map(line => `<p>${line}</p>`)
-                    .join("");
-            } else {
-                chatbox.innerHTML += `<p><strong>Error:</strong> Unexpected response format.</p>`;
-            }
-    
-            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
-        } catch (error) {
-            console.error("Error during fetch:", error);
-            chatbox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
         }
-    }
 
+        async function submitQuery() {
+            const queryInput = document.getElementById("queryInput");
+            const chatbox = document.getElementById("chatbox");
+
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            // Add user's query to the chatbox
+            chatbox.innerHTML += `
+                <div class="message user">
+                    <p>${query}</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="User" />
+                </div>`;
+            queryInput.value = "";
+
+            try {
+                const apiUrl = "https://7750-13-59-30-60.ngrok-free.app/query"; // Update this URL if using ngrok or deployed
+                console.log("Sending request to:", apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ query })
+                });
+
+                console.log("Received raw response:", response);
+
+                if (!response.ok) {
+                    throw new Error(`Server returned status ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log("Parsed response data:", data);
+
+                // Display bot's response
+                const botMessage = data.conversation ? data.conversation[data.conversation.length - 1] : "No response";
+                chatbox.innerHTML += `
+                    <div class="message bot">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6819/6819346.png" alt="Bot" />
+                        <p>${botMessage}</p>
+                    </div>`;
+
+                chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+            } catch (error) {
+                console.error("Error during fetch:", error);
+                chatbox.innerHTML += `
+                    <div class="message bot">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6819/6819346.png" alt="Bot" />
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
+        }
     </script>
 </body>
 </html>

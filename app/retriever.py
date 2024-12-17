@@ -48,4 +48,7 @@ def retrieve_context(query: str, vector_store, top_k: int = 2) -> str:
         str: Concatenated content of the retrieved documents.
     """
     results = vector_store.similarity_search(query, top_k)
+    print("-------------------")
+    print(results)
+    print("\n")
     return " ".join([result.page_content for result in results])

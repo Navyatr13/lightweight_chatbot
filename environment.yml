@@ -1,0 +1,4 @@
+name: chatbot_env
+channels:
+  - defaults
+prefix: /home/ubuntu/minicondanew/envs/chatbot_env

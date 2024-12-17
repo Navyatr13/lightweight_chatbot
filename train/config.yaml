@@ -1,0 +1,6 @@
+model_name: "distilgpt2"
+batch_size: 8
+learning_rate: 0.0005
+num_epochs: 2
+output_dir: "./outputs/fine_tuned_model/"
+log_dir: "./logs"

@@ -1,8 +1,8 @@
 from app.response_generator import generate_response
 
 # Example query and context
-query = "What is artificial intelligence?"
-context = "Artificial Intelligence is a branch of computer science. It aims to create systems capable of performing tasks that require human intelligence."
+query = "What is reason for flu?"
+context = "The common symptoms of flu include fever, cough, and body aches."
 
 # Generate response
 response = generate_response(query, context)
