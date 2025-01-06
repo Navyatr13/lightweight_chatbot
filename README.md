@@ -58,7 +58,7 @@ Includes:
     ```bash 
     pip install -r requirements.txt
 
-### ** Data Pipeline ** 
+### **Data Pipeline** 
 #### Dataset Preparation
 Training Dataset: A combination of healthcare FAQs.
 Fine-tuning the language model with healthcare-specific instructions and dialogues:
@@ -97,7 +97,7 @@ Update the apiUrl in index.html with the ngrok URL.
 #### Fine-tune the language model:
 ``` 
   python train/train.py 
-  ```
+```
 
 Update the fine-tuned model in the retrieval pipeline.
 ---
@@ -106,7 +106,6 @@ Update the fine-tuned model in the retrieval pipeline.
 
 Run tests for all modules to ensure the application is functioning correctly:
     
-    ```bash
     pytest app/tests
 
 ### Integration Details
