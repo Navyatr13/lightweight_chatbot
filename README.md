@@ -33,13 +33,12 @@ Ensure the following tools and packages are installed:
    pip install -r requirements.txt
 
 Includes:
-
-FastAPI
-LangChain and LangChain-Community
-HuggingFace Transformers
-FAISS for vector search
-Twilio SDK (for SMS integration)
-Dialogflow SDK (for voice integration)
+- FastAPI
+- LangChain and LangChain-Community
+- HuggingFace Transformers
+- FAISS for vector search
+- Twilio SDK (for SMS integration)
+- Dialogflow SDK (for voice integration)
 
 4. Install and configure ngrok for local testing:
   ```ngrok http 8000 ```
@@ -78,11 +77,6 @@ Generate embeddings for your retrieval system:
     
     python app/generate_embeddings.py
 
-#### Fine tuning
-Fine Tuning the model for improving the responses:
-    
-    python train/train.py
-
 #### Running the Application
 Local Deployment
 Start the FastAPI server:
@@ -99,31 +93,36 @@ Run ngrok for public access:
   ```
 
 Update the apiUrl in index.html with the ngrok URL.
-Model Training
-Fine-tune the language model:
+### Model Training
+#### Fine-tune the language model:
 ``` 
   python train/train.py 
   ```
 
 Update the fine-tuned model in the retrieval pipeline.
-Testing
-Run tests for all modules:
-pytest app/tests
-Integration Details
-SMS Integration
-Twilio Setup:
-Configure your Twilio account and phone number.
-Update your Twilio credentials in app/config.py.
-Voice Integration
-Dialogflow Setup:
+---
+
+### Testing
+
+Run tests for all modules to ensure the application is functioning correctly:
+    
+    ```bash
+    pytest app/tests
+
+### Integration Details
+#### SMS Integration
+- Twilio Setup:
+    Configure your Twilio account and phone number.
+    Update your Twilio credentials in app/config.py.
+#### Voice Integration
+- Dialogflow Setup:
 Create a Dialogflow agent for voice input handling.
 Link your webhook endpoint to the FastAPI backend.
-Future Enhancements
-Improved Retrieval Efficiency:
-Explore faster embedding models like MiniLM.
-Knowledge Base Expansion:
-Incorporate additional healthcare datasets (e.g., PubMedQA).
-Deployment:
-Scale the chatbot using Kubernetes and cloud platforms.
-Contributing
-Feel free to contribute to this project! Open an issue or create a pull request with your suggestions and fixes.
+
+### Future Enhancements
+1. Improved Retrieval Efficiency:
+   Explore faster embedding models like MiniLM.
+2. Knowledge Base Expansion:
+   Incorporate additional healthcare datasets (e.g., PubMedQA).
+3. Deployment:
+   Scale the chatbot using Kubernetes and cloud platforms.
