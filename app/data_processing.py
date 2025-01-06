@@ -2,37 +2,34 @@
 # Dataset Prep
 
 class LanguageDataset(Dataset):
-    """
-    An extension of the Dataset object to:
-      - Make training loop cleaner
-      - Make ingestion easier from pandas df's
-    """
     def __init__(self, df, tokenizer):
-        self.labels = df.columns
-        self.data = df.to_dict(orient='records')
+        self.data = df
         self.tokenizer = tokenizer
-        x = self.fittest_max_length(df)  # Fix here
-        self.max_length = x
+        self.max_length = self.fittest_max_length(df)
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        x = self.data[idx][self.labels[0]]
-        y = self.data[idx][self.labels[1]]
-        text = f"{x} | {y}"
-        tokens = self.tokenizer.encode_plus(text, return_tensors='pt', max_length=128, padding='max_length', truncation=True)
-        return tokens
+        input_text = self.data.iloc[idx]["Input"]
+        target_text = self.data.iloc[idx]["Disease"]
 
-    def fittest_max_length(self, df):  # Fix here
-        """
-        Smallest power of two larger than the longest term in the data set.
-        Important to set up max length to speed training time.
-        """
-        max_length = max(len(max(df[self.labels[0]], key=len)), len(max(df[self.labels[1]], key=len)))
-        x = 2
-        while x < max_length: x = x * 2
-        return x
+        input_tokens = self.tokenizer.encode_plus(
+            input_text, padding="max_length", truncation=True, max_length=self.max_length, return_tensors="pt"
+        )
+        target_tokens = self.tokenizer.encode_plus(
+            target_text, padding="max_length", truncation=True, max_length=self.max_length, return_tensors="pt"
+        )
+
+        return {
+            "input_ids": input_tokens["input_ids"].squeeze(0),
+            "labels": target_tokens["input_ids"].squeeze(0),
+        }
+
+    def fittest_max_length(self, df):
+        max_input_len = df["Input"].map(len).max()
+        max_output_len = df["Disease"].map(len).max()
+        return min(512, max(max_input_len, max_output_len))
 
 # Cast the Huggingface data set as a LanguageDataset we defined above
 data_sample = LanguageDataset(df, tokenizer)

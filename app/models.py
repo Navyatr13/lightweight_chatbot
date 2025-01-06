@@ -10,5 +10,6 @@ def load_model(model_name: str):
 
 def generate_response(generator, prompt: str):
     """Generate a response using the model."""
-    response = generator(prompt, max_length=50, num_return_sequences=1)
+    prompt = f"Context: {context}\n\nUser: {query}\n\nBot:"
+    response = generator(prompt, max_length=100, num_beams=3, early_stopping=True)
     return response[0]["generated_text"]

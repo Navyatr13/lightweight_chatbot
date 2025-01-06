@@ -6,7 +6,7 @@ from langchain.schema import Document
 from datasets import load_dataset, DatasetDict, Dataset
 
 # Paths to your documents and vector database
-DOCUMENTS_PATH = "./app/data/documents.txt"
+DOCUMENTS_PATH = "./app/data/ndocuments.txt"
 JSON_PATH = "./app/data/combined_disease_prediction_symptom.json"
 VECTOR_DB_PATH = "./app/data/vector_store"
 
@@ -61,7 +61,6 @@ def build_vector_store_from_json(json_path, vector_db_path):
 
     # Prepare text chunks
     print("Preparing text chunks...")
-    print(df)
     chunks = prepare_chunks_from_df(df)
     documents = [Document(page_content=chunk) for chunk in chunks]
     print(f"Prepared {len(documents)} documents for embedding.")
@@ -76,6 +75,20 @@ def build_vector_store_from_json(json_path, vector_db_path):
     print(f"Saving vector store to {vector_db_path}...")
     vector_store.save_local(vector_db_path)
     print("Vector store saved successfully.")
+
+def build_vector_store_from_dataframe(df, vector_db_path):
+    """
+    Generate embeddings and build a FAISS vector store from a DataFrame.
+    """
+    chunks = prepare_chunks_from_df(df)
+    documents = [Document(page_content=chunk) for chunk in chunks]
+
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_store = FAISS.from_documents(documents, embeddings)
+
+    vector_store.save_local(vector_db_path)
+    print(f"Vector store saved to {vector_db_path}")
+
 
 if __name__ == "__main__":
     build_vector_store_from_json(JSON_PATH, VECTOR_DB_PATH)

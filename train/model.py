@@ -1,3 +1,4 @@
+#train/model.py
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 def initialize_model(model_name, device):

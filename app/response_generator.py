@@ -1,6 +1,5 @@
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
-
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 def generate_response(query: str, context: str):
@@ -30,7 +29,7 @@ def generate_response(query: str, context: str):
         input_ids=inputs["input_ids"],
         attention_mask=inputs["attention_mask"],  # Explicit attention mask
         max_length=400,
-        temperature=0.3,
+        temperature=0.7,
         top_p=0.9,
         num_beams=5,
         no_repeat_ngram_size=2,
@@ -39,8 +38,8 @@ def generate_response(query: str, context: str):
 
     # Decode and clean the response
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    if response.startswith(input_text):
-        response = response[len(input_text):].strip()
+    if "Bot Response:" in response:
+        response = response.split("Bot Response:")[-1].strip()
 
     return response
 

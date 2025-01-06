@@ -3,7 +3,6 @@ from langchain_community.document_loaders import TextLoader
 from langchain_huggingface import HuggingFaceEmbeddings  # Updated import to resolve deprecation warnings
 import os
 
-
 def build_vector_store(document_path: str, vector_db_path: str):
     """
     Build and save a vector database from text documents.
@@ -48,7 +47,7 @@ def retrieve_context(query: str, vector_store, top_k: int = 2) -> str:
         str: Concatenated content of the retrieved documents.
     """
     results = vector_store.similarity_search(query, top_k)
-    print("-------------------")
-    print(results)
-    print("\n")
     return " ".join([result.page_content for result in results])
+
+
+

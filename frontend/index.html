@@ -76,6 +76,17 @@
         .input-container button:hover {
             background: #0056b3;
         }
+        .integration-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .integration-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .integration-container a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -92,6 +103,11 @@
             <button onclick="submitQuery()">Send</button>
         </div>
     </div>
+
+    <div class="integration-container">
+        <p>Want to interact via <a href="sms://your-twilio-number">SMS</a> or <a href="tel:your-twilio-number">Call</a>? Try now!</p>
+    </div>
+
     <script>
         // Function to submit the query on Enter key press
         function handleKeyPress(event) {
@@ -116,7 +132,7 @@
             queryInput.value = "";
 
             try {
-                const apiUrl = "https://7750-13-59-30-60.ngrok-free.app/query"; // Update this URL if using ngrok or deployed
+                const apiUrl = "http://localhost:8000/query"; // Update to Ngrok URL if hosted
                 console.log("Sending request to:", apiUrl);
 
                 const response = await fetch(apiUrl, {
