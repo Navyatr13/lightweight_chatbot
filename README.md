@@ -45,7 +45,7 @@ Includes:
 5. Installation
 1. Clone the repository:
     ```bash 
-    git clone https://github.com/yourusername/lightweight-healthcare-chatbot.git
+    git clone https://github.com/Navyatr13/lightweight-healthcare-chatbot.git
     cd lightweight-healthcare-chatbot
    
 2. Create and activate a virtual environment:

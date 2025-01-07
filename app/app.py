@@ -84,9 +84,30 @@ def query_chatbot(request: QueryRequest):
 
 
 @app.post("/sms")
-def sms_interaction(request: QueryRequest):
-    query = request.query
+async def sms_interaction(request: Request):
+    """Handles incoming SMS from Twilio."""
+    form_data = await request.form()
+    query = form_data.get("Body")  # Extract SMS body
+    print(f"Received SMS query: {query}")
+
+    start_time = time.time()
+
+    # Retrieve context and generate response
     vector_store = load_vector_store(VECTOR_DB_PATH)
     context = retrieve_context(query, vector_store)
-    response = generate_response(generator, query, context)
-    return {"reply": response}
+    if not context or len(context.strip()) == 0:
+        context = "The user has initiated a conversation."
+    if len(context.split()) > MAX_CONTEXT_LENGTH:
+        context = " ".join(context.split()[:MAX_CONTEXT_LENGTH])
+    response = generate_response(query, context)
+
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"Time taken for SMS response: {total_time:.2f} seconds")
+    print(f"Generated SMS response: {response}")
+
+    # Prepare Twilio MessagingResponse
+    twilio_response = MessagingResponse()
+    twilio_response.message(response)
+
+    return PlainTextResponse(str(twilio_response))

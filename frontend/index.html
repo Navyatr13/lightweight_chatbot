@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Healthcare Chatbot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,6 +83,7 @@
         .integration-container a {
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
         }
         .integration-container a:hover {
             text-decoration: underline;
@@ -91,11 +92,11 @@
 </head>
 <body>
     <div class="chat-container">
-        <h1>Chatbot</h1>
+        <h1>Healthcare Chatbot</h1>
         <div id="chatbox" class="messages">
             <div class="message bot">
                 <img src="https://cdn-icons-png.flaticon.com/512/6819/6819346.png" alt="Bot" />
-                <p>Welcome to the chatbot! Start your conversation below.</p>
+                <p>Welcome to the Healthcare Chatbot! Type your query below or try our SMS and voice features.</p>
             </div>
         </div>
         <div class="input-container">
@@ -105,11 +106,14 @@
     </div>
 
     <div class="integration-container">
-        <p>Want to interact via <a href="sms://your-twilio-number">SMS</a> or <a href="tel:your-twilio-number">Call</a>? Try now!</p>
+        <p>Prefer SMS or voice? Try our integrations:</p>
+        <p>
+            <a href="sms:+15179400837">Send SMS</a> |
+            <a href="tel:+15179400837">Make a Call</a>
+        </p>
     </div>
 
     <script>
-        // Function to submit the query on Enter key press
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 submitQuery();
